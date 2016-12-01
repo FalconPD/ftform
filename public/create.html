@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs -->
+  <meta charset="utf-8">
+  <title>Submit a Field Trip Request</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/angular-moment-picker.min.css">
+  <link rel="stylesheet" href="css/ftform.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+
+  <script src="https://use.fontawesome.com/a11a263ab5.js"></script>
+  <script src="js/angular.js"></script>
+  <script src="js/ng-file-upload-shim.js"></script>
+  <script src="js/ng-file-upload.js"></script>
+  <script src="js/moment.min.js"></script>
+  <script src="js/angular-moment-picker.min.js"></script>
+  <script src="js/create.js"></script>
+
+</head>
+
+<body ng-app="ftform" ng-controller="MyCtrl">
+
+  <!-- Primary Page Layout -->
+  <div class="container">
+    <form name="myForm">
+      <div class="row">
+        <div class="center" style="margin-top: 1rem;">
+         <h4>Field Trip Request</h4>
+       </div>
+      </div>
+      <fieldset>
+        <legend>General Information</legend>
+        <div class="row">
+          <div class="nine columns">
+            <label for="submitters">District Email Address(es) of Submitter(s)</label>
+            <div class="error">{{submittersError}}</div>
+            <input class="u-full-width" type="text" placeholder="FirstName1.LastName1@monroe.k12.nj.us, FirstName2.LastName2@monroe.k12.nj.us..." ng-model="submitters" ng-model-options="{ updateOn: 'blur' }" email-list="submittersError" required>
+          </div>
+          <div class="three columns">
+            <label for="building">Building</label>
+              <select class="u-full-width" ng-model="formData.building" required>
+                <option value="Applegarth">Applegarth</option>
+                <option value="Barclay Brook">Barclay Brook</option>
+                <option value="Brookside">Brookside</option>
+                <option value="High School">High School</option>
+                <option value="Middle School">Middle School</option>
+                <option value="Mill Lake">Mill Lake</option>
+                <option value="Oak Tree">Oak Tree</option>
+                <option value="Woodland">Woodland</option>
+              </select>
+          </div>
+        </div> 
+        <div class="row">
+          <div class="six columns">
+            <label for="destination">Destination</label>
+            <input class="u-full-width" type="text" placeholder="Full Name of Destination" ng-model="formData.destination" required>
+          </div>
+          <div class="six columns">
+            <label for="group">Group</label>
+            <input class="u-full-width" type="text" placeholder="Class/Group/Club Attending Trip" ng-model="formData.group" required>
+          </div> 
+        </div>
+        <div class="row">
+          <div class="two columns">
+            <label>Grade(s):</label>
+          </div>
+          <div class="ten columns">
+            <div name="gradesError" class="error-border" ng-model="gradesErrorModel">
+              <span ng-repeat="grade in gradesAvailable">
+                <input type="checkbox" ng-model="grades[$index]">
+                <span class="grades">{{grade}}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label for="itinerary">Initerary (include time at destination, lunch arrangements, and additional stops)</label>
+          <textarea class="u-full-width" ng-model="formData.itinerary" required></textarea>
+        </div>
+        <div class="row">
+          <div class="two columns">
+            <label for="pupils">Pupils</label>
+            <input class="u-full-width" type="number" min="0" ng-model="formData.pupils" required>
+          </div>
+          <div class="two columns">
+            <label for="teachers">Teachers/Staff</label>
+            <input class="u-full-width" type="number" min="0" ng-model="formData.teachers" required>
+          </div>
+          <div class="two columns">
+            <label for="chaperones">Chaperones</label>
+            <input class="u-full-width" type="number" min="0" ng-model="formData.chaperones" required>
+          </div>
+          <div class="two columns">
+            <label for="total">Total</label>
+            <input class="u-full-width" type="number" value="{{formData.pupils + formData.teachers + formData.chaperones}}" disabled>
+          </div>
+          <div class="four columns">
+            <div name="rostersName" class="button" ng-model="rostersModel" ngf-select="upload($file, rosters)" ngf-accept="'.xlsx'" ngf-max-size="'10MB'" ngf-pattern="'.xlsx'">Attach Roster</div>
+            <div>{{rosters.status}}</div>
+            <div ng-repeat="file in rosters.files">
+              <i class="fa fa-times clickable" ng-click="remove($index, rosters, myForm.rostersName)"></i>
+              <a href="{{file.url}}">{{file.name}}</a>
+            </div>
+          </div>
+        </div>
+        <div ng-if="formData.chaperones > 0">
+          <div class="row">
+            <label>Chaperones:</label>
+          </div>
+          <div class="row" ng-if="formData.chaperones > 0">
+            <div class="six columns">
+              <label>Name</label>
+            </div>
+            <div class="six columns">
+              <label>Phone Number</label>
+            </div>
+          </div>
+          <div ng-repeat="i in createRange(formData.chaperones) track by $index">
+            <div class="row">
+              <div class="six columns">
+                <input class="u-full-width" type="text" ng-model="formData.chaperoneList[$index].name" placeholder="FirstName LastName" required>
+              </div>
+              <div class="six columns">
+                <input class="u-full-width" type="tel" ng-model="formData.chaperoneList[$index].phone" placeholder="732-555-5555" required>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="six columns">
+            <label>Leaving School</label>
+            <div name="departureDiv" class="date" moment-picker="formData.departure" ng-model="formData.departure">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              {{formData.departure || 'Click to select a date...'}}
+            </div>
+          </div>
+          <div class="six columns">
+            <label>Returning to School</label>
+            <div name="returnDiv" class="date" moment-picker="formData.return" ng-model="formData.return">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              {{formData.return || 'Click to select a date...'}}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Funding</legend>
+        <div class="row">
+          <div class="three columns">
+            <label for="funds">Source of Funds</label>
+            <select class="u-full-width" ng-model="formData.funds" required>
+              <option value="Building Budget">Building Budget</option>
+              <option value="Student Funded">Student Funded</option>
+            </select>
+          </div>
+          <div class="nine columns">
+            <label for="costs">Costs (Describe all costs in detail. Buses are $75 per hour.)</label>
+            <textarea class="u-full-width" ng-model="formData.costs" required></textarea>
+          <div>
+        <div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Transportation</legend>
+        <div class="row">
+          <div class="four columns">
+            <label for"buses">Number of Buses Required</label>
+            <input class="u-full-width" type="number" min="0" ng-model="formData.buses" required>
+          </div>
+          <div class="four columns">
+            <label ng-repeat="vehicle in vehiclesAvailable">
+              <input type="checkbox" ng-model="vehicles[$index]">
+              <span class="label-body">{{vehicle.name}}</span>
+            </label>
+          </div>
+          <div class="four columns">
+            <div name="directionsName" ng-model="directionsModel" class="button" ngf-select="upload($file, directions)" ngf-accept="'.pdf'" ngf-max-size="10MB">Attach Directions</div>
+            <div>{{directions.status}}</div>
+            <div ng-repeat="file in directions.files">
+              <i class="fa fa-times clickable" ng-click="remove($index, directions, myForm.directionsName)"></i>
+              <a href="{{file.url}}">{{file.name}}</a>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label for="transportationNotes">Notes</label>
+          <textarea class="u-full-width" ng-model="formData.transportationNotes" ng-required="notesRequired"></textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Curriculum Questions</legend>
+        <div class="row">
+          <label for="standards">What unit(s) of study / curriculum standards will be addressed during this trip? Please be specific.</label>
+          <textarea class="u-full-width" ng-model="formData.standards" required></textarea>
+        </div>
+        <div class="row">
+          <label for="anticipatory">Please describe the planned anticipatory activity to be completed with the students in advance of this trip.</label>
+          <textarea class="u-full-width" ng-model="formData.anticipatory" required></textarea>
+        </div>
+        <div class="row">
+          <label for="purpose">Please describe the educational purpose and value of this trip. What will the students learn and HOW?</label>
+          <textarea class="u-full-width" ng-model="formData.purpose" required></textarea>
+        </div>
+      </fieldset>
+
+      <div class="row">
+        <div class="center">
+          <button ng-model="submitButton" ng-disabled="myForm.$invalid" ng-click="submit()">Submit</button>
+        </div>
+      </div>
+    </form> 
+  </div>
+
+<!-- End Document -->
+</body>
+</html>

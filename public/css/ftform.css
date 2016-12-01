@@ -1,0 +1,34 @@
+/* Input validation */
+textarea.ng-invalid,
+select.ng-invalid,
+input.ng-invalid,
+div.ng-invalid {
+  border: solid 1px red;
+}
+
+/* Error messages for file lists */
+div.error {
+  color: red;
+}
+
+/* Grades checkboxes need special spacing */
+span.grades {
+  margin-right: 1.5rem;
+  font-weight: normal;
+}
+
+/* This surrounds the grades checkboxes so we can see errors */
+div.error-border {
+  padding-left: 1rem;
+  border-radius: 4px;
+}
+
+/* momentPicker date divs need to look like our other inputs */
+div.date {
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+div.center {
+  text-align: center;
+}
