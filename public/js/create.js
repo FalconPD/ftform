@@ -7,10 +7,10 @@ app.controller('MyCtrl', ['$scope', '$http', 'Upload', function ($scope, $http, 
   $scope.formData.emails = [];
   $scope.formData.grades = [];
   $scope.formData.vehicles = [];
+  $scope.formData.chaperoneList = [];
 
   $scope.directions = { status: '', files: []};
   $scope.rosters = { status: '', files: []};
-  $scope.chaperoneList = [];
   $scope.vehicles = [];
   $scope.grades = [];
   $scope.notesRequired = false;

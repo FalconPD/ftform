@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs -->
+  <meta charset="utf-8">
+  <base href="/">
+  <title>View a Field Trip Request</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/ftform.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+
+  <script src="js/angular.js"></script>
+  <script src="js/moment.min.js"></script>
+  <script src="js/view.js"></script>
+  <script src="js/angular-sanitize.js"></script>
+
+</head>
+
+<body ng-app="ftform" ng-controller="MyCtrl">
+
+  <!-- Primary Page Layout -->
+  <div class="container">
+
+    <!-- Title -->
+    <div class="row">
+      <div class="center" style="margin-top: 1rem;">
+        <h4>Viewing {{friendlyName}}</h4>
+      </div>
+    </div>
+
+    <!-- General Information -->
+    <div class="row view-section">General Information</div>
+    <div class="alternate">
+      <div class="row">
+        <div class="three columns view-label">Submitter(s):</div>
+        <div class="seven columns">
+           <span ng-repeat="email in response.emails">
+             <a href="mailto:{{email}}?subject={{friendlyName}}">{{email}}</a>
+             <span ng-show="!$last">, </span>
+           </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Building:</div>
+        <div class="seven columns">{{response.building}}</div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Destination:</div>
+        <div class="seven columns">{{response.destination}}</div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Group:</div>
+        <div class="seven columns">{{response.group}}</div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Grades:</div>
+        <div class="seven columns">
+          <span ng-repeat="grade in response.grades">
+            {{grade}}
+            <span ng-show="!$last">, </span>
+          </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Itinerary:</div>
+        <div class="seven columns" ng-bind-html="response.itinerary | breakFilter"></div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Pupils:</div>
+        <div class="seven columns">{{response.pupils}}</div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Teachers/Staff:</div>
+        <div class="seven columns">{{response.teachers}}</div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Chaperones:</div>
+        <div class="seven columns">{{response.chaperones}}</div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Total:</div>
+        <div class="seven columns">{{total}}</div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Rosters:</div>
+        <div class="seven columns">
+          <span ng-repeat="roster in response.rosters">
+            <a href="{{roster.url}}" target="_self">{{roster.name}}</a>
+            <span ng-show="!$last">, </span>
+          </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Chaperones:</div>
+        <div class="seven columns">
+          <span ng-repeat="chaperone in response.chaperoneList">
+            {{chaperone.name}} (<a href="{{'tel:+1-' + chaperone.phone}}">{{chaperone.phone}}</a>)
+            <span ng-show="!$last">, </span>
+          </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Leaving School:</div>
+        <div class="seven columns">{{friendlyDeparture}}</div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Returning to School:</div>
+        <div class="seven columns">{{friendlyReturn}}</div>
+      </div>
+    </div>
+
+    <!-- Funding -->
+    <div class="row view-section">Funding</div>
+    <div class="alternate">
+      <div class="row">
+        <div class="three columns view-label">Source of Funds:</div>
+        <div class="seven columns">{{response.funds}}</div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Costs:</div>
+        <div class="seven columns" ng-bind-html="response.costs | breakFilter"></div>
+      </div>
+    </div>
+
+    <!-- Transportation -->
+    <div class="row view-section">Transportation</div>
+    <div class="alternate">
+      <div class="row">
+        <div class="three columns view-label">Number of Buses Required:</div>
+        <div class="seven columns">{{response.buses}}</div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Other Vehicles Requested:</div>
+        <div class="seven columns">
+          <span ng-repeat="vehicle in response.vehicles">
+            {{vehicle}}
+            <span ng-show="!$last">, </span>
+          </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Directions:</div>
+        <div class="seven columns">
+          <span ng-repeat="direction in response.directions">
+            <a href="{{direction.url}}" target="_self">{{direction.name}}</a>
+            <span ng-show="!$last">, </span>
+          </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label">Notes:</div>
+        <div class="seven columns" ng-bind-html="response.transportationNotes | breakFilter"></div>
+      </div>
+    </div>
+
+    <!-- Curriculum -->
+    <div class="row view-section">Curriculum Questions</div>
+    <div class="alternate">
+      <div class="row">
+        <div class="three columns view-label-left">
+          What unit(s) of study / curriculum standards will be addressed during
+          this trip? Please be specific.
+        </div>
+        <div class="seven columns" ng-bind-html="response.standards | breakFilter"></div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label-left">
+          Please describe the planned anticipatory activity to be completed
+          with the students in advance of this trip.
+        </div>
+        <div class="seven columns" ng-bind-html="response.anticipatory | breakFilter"></div>
+      </div>
+      <div class="row">
+        <div class="three columns view-label-left">
+          Please describe the educational purpose and value of this trip.
+          What will the students learn and HOW?
+        </div>
+        <div class="seven columns" ng-bind-html="response.purpose | breakFilter"></div>
+      </div>
+    </div>
+
+  </div>
+  
+  <      
+<!-- End Document -->
+</body>
+</html>

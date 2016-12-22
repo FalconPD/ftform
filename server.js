@@ -10,36 +10,39 @@ mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 var fieldTripSchema = mongoose.Schema({
-	formStatus: String,
-	dateSubmitted: Date,
-	submitters: [ { type: String, requried: true } ],
-	grades: [ { type: String, required: true } ],
-	group: { type: String, required: true },
-	destination: { type: String, required: true },
-	itinerary: { type: String, required: true },
-	pupils: { type: Number, required: true },
-	teachers: { type: Number, required: true },
-	chaperones: { type: Number, required: true },
-	chaperoneInfo: [ { name: { type: String, required: true },
-                           phoneNumber: { type: String, required: true } } ],
-	leavingSchool: { type: Date, required: true },
-	leavingDestination: { type: Date, required: true },
-	returnToSchool: { type: Date, required: true },
-	extraVehicle: { type: Boolean, required: true },
-	sourceofFunds: { type: String, required: true },
-	costs: { type: String, required: true },
-	buses: { type: Number, required: true },
-	transportedBy: String,
-	standards: [ { type: String, required: true } ],
-	anticipatoryActivity: { type: String, required: true },
-	educationalValue: { type: String, required: true },
-	nurseRequired: Boolean,
-	nurseAttending: String,
-	rosterId: { type: String, required: true },
-	directionsId: { type: String, required: true },
-	actions: [ String ],
-	events: [ { timeStamp: Date, user: String, theEvent: String } ],
-	approvals: [ {name: String, approvalStatue: String}]
+	emails:              {type: [{type: String, requried: true}],
+                        required: true},
+	grades:              {type: [{type: String, required: true}],
+                        required: true},
+  vehicles:            {type: [{type: String, required: true}],
+                        required: true},
+	chaperoneList:       {type: [{name: {type: String, required: true},
+                                phone: {type: String, required: true}}],
+                        required: true},
+  rosters:             {type: [{name: {type: String, required: true},
+                                url: {type: String, required: true}}],
+                        required: true},
+  directions:          {type: [{name: {type: String, required: true},
+                                url: {type: String, required: true}}],
+                        required: true},
+  building:            {type: String, required: true},
+  destination:         {type: String, required: true},
+  group:               {type: String, required: true},
+  itinerary:           {type: String, required: true},
+  pupils:              {type: Number, required: true},
+  teachers:            {type: Number, required: true},
+  chaperones:          {type: Number, required: true},
+  departure:           {type: Date, required: true},
+  return:              {type: Date, required: true},
+  funds:               {type: String, required: true},
+  costs:               {type: String, required: true},
+  buses:               {type: Number, required: true},
+  transportationNotes: {type: String, required: true},
+  standards:           {type: String, required: true},
+  anticipatory:        {type: String, required: true},
+  purpose:             {type: String, required: true},
+	formStatus:          {type: String},
+	dateSubmitted:       {type: Date}
 });
 var fieldTrip = mongoose.model('fieldTrip', fieldTripSchema);
 
@@ -57,8 +60,19 @@ app.use(express.static('public'));
 
 /* Create a new field trip */
 app.post('/api/create', function (req, res) {
-  console.log(req.fields);
-  res.status(200).send("Field trip request created");
+
+  var doc = new fieldTrip(req.fields);
+
+	doc.save(function(err) {
+		if (err) {
+			res.status(400).send(err);
+		} else {
+			res.status(200).send(doc.id);
+		}
+	});
+});
+//  console.log(req.fields);
+//  res.status(200).send("Field trip request created");
 /*	var doc = new fieldTrip(req.body);
 	doc.formStatus = "PENDING";
 	doc.dateSubmitted = Date.now();
@@ -74,8 +88,8 @@ app.post('/api/create', function (req, res) {
 		} else {
 			res.status(200).send("Field trip request created");
 		}
-	});*/
-});
+	});
+});*/
 
 
 app.get('/api/view/:id', function (req, res) {
