@@ -42,7 +42,8 @@ var fieldTripSchema = mongoose.Schema({
   anticipatory:        {type: String, required: true},
   purpose:             {type: String, required: true},
 	formStatus:          {type: String},
-	dateSubmitted:       {type: Date}
+	dateSubmitted:       {type: Date},
+  nurse:               {type: String}
 });
 var fieldTrip = mongoose.model('fieldTrip', fieldTripSchema);
 
@@ -63,34 +64,18 @@ app.post('/api/create', function (req, res) {
 
   var doc = new fieldTrip(req.fields);
 
+  doc.formStatus = 'Pending Signatures';
+  doc.nurse = 'Unknown';
+  doc.dateSubmitted = Date.now();
+
 	doc.save(function(err) {
 		if (err) {
 			res.status(400).send(err);
 		} else {
-			res.status(200).send(doc.id);
+			res.status(201).send(doc.id);
 		}
 	});
 });
-//  console.log(req.fields);
-//  res.status(200).send("Field trip request created");
-/*	var doc = new fieldTrip(req.body);
-	doc.formStatus = "PENDING";
-	doc.dateSubmitted = Date.now();
-	doc.nurseAttending = "";
-	doc.actions = [];
-	doc.events = [ { timeStamp: Date.now(),
-			      user: doc.submitters.join(", "),
-			  theEvent: "Field trip request created" } ]; 
-	doc.approvals = [];
-	doc.save(function(err) {
-		if (err) {
-			res.status(400).send(err);
-		} else {
-			res.status(200).send("Field trip request created");
-		}
-	});
-});*/
-
 
 app.get('/api/view/:id', function (req, res) {
 	fieldTrip.findById(req.params.id, function (err, doc) {
@@ -100,6 +85,16 @@ app.get('/api/view/:id', function (req, res) {
 			res.status(200).send(doc);
 		}
 	});
+});
+
+app.get('/api/list', function (req, res) {
+  fieldTrip.find('{}', function (err, docs) {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(docs);
+    }
+  });
 });
 
 /* Handle file uploads */
@@ -114,7 +109,7 @@ app.post('/api/upload', function (req, res) {
    var size = req.files.file.size;
    var extension = path.extname(filepath);
 
-   console.log("FILE UPLOAD - " + name + ', ' + filepath + ', ' + size + ', ' + extension);
+   console.log("FILE UPLOAD - " + name);
 
    if ((extension != '.pdf') && (extension != '.xlsx')) {
      fs.unlink(filepath, function(err) {});

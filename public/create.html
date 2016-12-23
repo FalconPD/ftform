@@ -144,16 +144,16 @@
         <div class="row">
           <div class="six columns">
             <label>Leaving School</label>
-            <div name="departureDiv" class="date" moment-picker="formData.departure" ng-model="formData.departure">
+            <div name="departureDiv" class="date" moment-picker="pickerDeparture" ng-model="formData.departure">
               <i class="fa fa-calendar" aria-hidden="true"></i>
-              {{formData.departure || 'Click to select a date...'}}
+              {{pickerDeparture || 'Click to select a date...'}}
             </div>
           </div>
           <div class="six columns">
             <label>Returning to School</label>
-            <div name="returnDiv" class="date" moment-picker="formData.return" ng-model="formData.return">
+            <div name="returnDiv" class="date" moment-picker="pickerReturn" ng-model="formData.return">
               <i class="fa fa-calendar" aria-hidden="true"></i>
-              {{formData.return || 'Click to select a date...'}}
+              {{pickerReturn || 'Click to select a date...'}}
             </div>
           </div>
         </div>

@@ -175,7 +175,7 @@ app.directive('emailList', function(){
   };
 });
 
-app.directive('appDatetime', function ($window) {
+/*app.directive('appDatetime', function ($window) {
   return {
     restrict: 'A',
     require: 'ngModel',
@@ -190,7 +190,7 @@ app.directive('appDatetime', function ($window) {
 
     }
   };
-});
+});*/
 
 app.config(['momentPickerProvider', function (momentPickerProvider) {
   momentPickerProvider.options({

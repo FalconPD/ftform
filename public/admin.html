@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs -->
+  <meta charset="utf-8">
+  <base href="/">
+  <title>Field Trip Requests</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/ftform.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+
+  <script src="js/angular.js"></script>
+  <script src="js/moment.min.js"></script>
+  <script src="js/admin.js"></script>
+
+</head>
+
+<body ng-app="ftform" ng-controller="MyCtrl">
+
+  <!-- Primary Page Layout -->
+  <div class="container">
+
+    <div class="row">
+      <table class="u-full-width">
+        <thead>
+          <tr>
+            <th>Submitted</th>
+            <th>Status</th>
+            <th>Building</th>
+            <th>Destination</th>
+            <th>Attendees</th>
+            <th>Departure</th>
+            <th>Submitters</th>
+            <th>Nurse</th>
+            <th>Buses</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="row in tableData">
+            <td>{{row.submitted}}</td>
+            <td>{{row.status}}</td>
+            <td>{{row.building}}</td>
+            <td>{{row.destination}}</td>
+            <td>{{row.total}}</td>
+            <td>{{row.friendlyDeparture}}</td>
+            <td>
+              <div ng-repeat="email in row.emails">
+                <a href="mailto:{{email}}?subject={{row.friendlyName}}">{{email}}</a>
+              </div>
+              <div ng-show="row.emails.length > 1">
+                <a href="{{row.emailAllUrl}}">Email All</a>
+              </div>
+            </td>
+            <td>{{row.nurse}}</td>
+            <td>{{row.buses}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  
+<!-- End Document -->
+</body>
+</html>
