@@ -33,12 +33,6 @@ div.center {
   text-align: center;
 }
 
-div.alternate {
-  border-style: solid;
-  border-width: 1px;
-  border-color: #c0c0c0;
-}
-
 div.view-label {
   text-align: right;
   font-weight: 500;
@@ -49,7 +43,7 @@ div.view-label-left {
   font-weight: 500;
 }
 
-div.view-section {
+div.view-section-label {
   text-align: center;
   margin-top: 2.0rem;
   margin-bottom: 0.25rem;
@@ -59,14 +53,14 @@ div.view-section {
   letter-spacing: -.05rem;
 }
 
-div.alternate div.row:nth-child(odd) {
-  background: #CCC;
+div.view-section,
+div.view-section > div.row {
+  border-style: solid;
+  border-width: 1px;
+  border-color: #c0c0c0;
 }
 
-div.alternate div.row:nth-child(even) {
-  background: #FFF;
-}
-
-tr.hover:hover {
-  background-color: #CCC;
-}
+.hover-highlight:hover,
+div.view-section > div.row:hover {
+  background-color: #FFFF96;
+} 

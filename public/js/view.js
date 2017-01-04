@@ -16,8 +16,6 @@ app.controller('MyCtrl', ['$scope', '$http', '$location', function ($scope, $htt
     $scope.response = response.data;
     $scope.friendlyName = 'Field Trip to ' + $scope.response.destination + ' on ' +
                           moment($scope.response.departure).format('L');
-    $scope.friendlyDeparture = moment($scope.response.departure).format('LLLL');
-    $scope.friendlyReturn = moment($scope.response.return).format('LLLL');
     $scope.total = $scope.response.pupils + $scope.response.teachers + $scope.response.chaperones;
   });
 }]);

@@ -24,7 +24,6 @@
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
 
   <script src="js/angular.js"></script>
-  <script src="js/moment.min.js"></script>
   <script src="js/view.js"></script>
   <script src="js/angular-sanitize.js"></script>
 
@@ -43,8 +42,12 @@
     </div>
 
     <!-- General Information -->
-    <div class="row view-section">General Information</div>
-    <div class="alternate">
+    <div class="row view-section-label">General Information</div>
+    <div class="view-section">
+      <div class="row">
+        <div class="three columns view-label">Submitted:</div>
+        <div class="seven columns">{{response.submitted | date: "EEE M/d/yy h:mm a"}}</div>
+      </div>
       <div class="row">
         <div class="three columns view-label">Submitter(s):</div>
         <div class="seven columns">
@@ -115,17 +118,17 @@
       </div>
       <div class="row">
         <div class="three columns view-label">Leaving School:</div>
-        <div class="seven columns">{{friendlyDeparture}}</div>
+        <div class="seven columns">{{response.departure | date: "EEE M/d/yy h:mm a"}}</div>
       </div>
       <div class="row">
         <div class="three columns view-label">Returning to School:</div>
-        <div class="seven columns">{{friendlyReturn}}</div>
+        <div class="seven columns">{{response.return | date: "EEE M/d/yy h:mm a"}}</div>
       </div>
     </div>
 
     <!-- Funding -->
-    <div class="row view-section">Funding</div>
-    <div class="alternate">
+    <div class="row view-section-label">Funding</div>
+    <div class="view-section">
       <div class="row">
         <div class="three columns view-label">Source of Funds:</div>
         <div class="seven columns">{{response.funds}}</div>
@@ -137,8 +140,8 @@
     </div>
 
     <!-- Transportation -->
-    <div class="row view-section">Transportation</div>
-    <div class="alternate">
+    <div class="row view-section-label">Transportation</div>
+    <div class="view-section">
       <div class="row">
         <div class="three columns view-label">Number of Buses Required:</div>
         <div class="seven columns">{{response.buses}}</div>
@@ -168,8 +171,8 @@
     </div>
 
     <!-- Curriculum -->
-    <div class="row view-section">Curriculum Questions</div>
-    <div class="alternate">
+    <div class="row view-section-label">Curriculum Questions</div>
+    <div class="view-section">
       <div class="row">
         <div class="three columns view-label-left">
           What unit(s) of study / curriculum standards will be addressed during
@@ -193,6 +196,18 @@
       </div>
     </div>
 
+    <!-- Signatures -->
+    <div class="row view-section-label">Signatures</div>
+    <div class="view-section">
+      <div class="row" ng-repeat="signature in response.signatures">
+        <div class="three columns">{{signature.timeStamp | date: "EEE M/d/yy h:mm a"}}</div>
+        <div class="two columns">{{signature.response}}</div>
+        <div class="two columns">{{signature.role}}</div>
+        <div class="two columns">{{signature.name}}</div>
+        <div class="three columns">{{signature.comments}}</div>
+      </div>
+    </div>
+    
   </div>
   
   <      

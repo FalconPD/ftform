@@ -78,7 +78,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="hover" ng-repeat="row in tableData | orderBy:sortType:sortReverse">
+          <tr class="hover-highlight" ng-repeat="row in tableData | orderBy:sortType:sortReverse">
             <td>{{row.submitted | date : "EEE M/d/yy h:mm a"}}</td>
             <td>{{row.departure | date : "EEE M/d/yy h:mm a"}}</td>
             <td>{{row.building}}</td>
@@ -94,7 +94,8 @@
             </td>
             <td>{{row.status}}</td>
             <td>
-              <div>View</div>
+              <div><a href={{row.viewUrl}}>View</a></div>
+              <div>Sign</div>
             </td>
           </tr>
         </tbody>

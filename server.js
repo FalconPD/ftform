@@ -43,7 +43,12 @@ var fieldTripSchema = mongoose.Schema({
   purpose:             {type: String, required: true},
 	status:              {type: String},
 	submitted:           {type: Date},
-  nurse:               {type: String}
+  nurse:               {type: String},
+  signatures:          {type: [{role: {type: String},
+                                name: {type: String},
+                                response: {type: String},
+                                timeStamp: {type: Date},
+                                comments: {type: String}}]}
 });
 var fieldTrip = mongoose.model('fieldTrip', fieldTripSchema);
 
@@ -67,6 +72,14 @@ app.post('/api/create', function (req, res) {
   doc.status = 'Pending Signatures';
   doc.nurse = 'Unknown';
   doc.submitted = Date.now();
+
+  /* FIXME: This is test data */
+  doc.signatures = [{role: 'Test Role',
+                     name: 'Test Name',
+                     response: 'APPROVED',
+                     timeStamp: Date.now(),
+                     comments: 'Test comments'}];
+                     
 
 	doc.save(function(err) {
 		if (err) {

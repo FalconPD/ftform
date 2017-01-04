@@ -22,7 +22,8 @@ app.controller('MyCtrl', ['$scope', '$http', function ($scope, $http) {
         'emails'      : fieldTrip.emails,
         'status'      : fieldTrip.status,
         'friendlyName': friendlyName,
-        'emailAllUrl' : 'mailto:' + fieldTrip.emails.join('; ') + '?subject=' + friendlyName 
+        'emailAllUrl' : 'mailto:' + fieldTrip.emails.join('; ') + '?subject=' + friendlyName,
+        'viewUrl': 'view.html?id=' + fieldTrip._id 
       });
     }
   });
