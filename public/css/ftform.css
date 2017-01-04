@@ -66,3 +66,7 @@ div.alternate div.row:nth-child(odd) {
 div.alternate div.row:nth-child(even) {
   background: #FFF;
 }
+
+tr.hover:hover {
+  background-color: #CCC;
+}

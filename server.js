@@ -41,8 +41,8 @@ var fieldTripSchema = mongoose.Schema({
   standards:           {type: String, required: true},
   anticipatory:        {type: String, required: true},
   purpose:             {type: String, required: true},
-	formStatus:          {type: String},
-	dateSubmitted:       {type: Date},
+	status:              {type: String},
+	submitted:           {type: Date},
   nurse:               {type: String}
 });
 var fieldTrip = mongoose.model('fieldTrip', fieldTripSchema);
@@ -64,9 +64,9 @@ app.post('/api/create', function (req, res) {
 
   var doc = new fieldTrip(req.fields);
 
-  doc.formStatus = 'Pending Signatures';
+  doc.status = 'Pending Signatures';
   doc.nurse = 'Unknown';
-  doc.dateSubmitted = Date.now();
+  doc.submitted = Date.now();
 
 	doc.save(function(err) {
 		if (err) {

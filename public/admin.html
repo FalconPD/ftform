@@ -23,6 +23,7 @@
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
 
+  <script src="https://use.fontawesome.com/a11a263ab5.js"></script>
   <script src="js/angular.js"></script>
   <script src="js/moment.min.js"></script>
   <script src="js/admin.js"></script>
@@ -38,25 +39,51 @@
       <table class="u-full-width">
         <thead>
           <tr>
-            <th>Submitted</th>
-            <th>Status</th>
-            <th>Building</th>
-            <th>Destination</th>
-            <th>Attendees</th>
-            <th>Departure</th>
-            <th>Submitters</th>
-            <th>Nurse</th>
-            <th>Buses</th>
+            <th class="clickable" ng-click="sortType='submitted'; sortReverse = !sortReverse">
+              Submitted
+              <span ng-show="sortType == 'submitted' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'submitted' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th class="clickable" ng-click="sortType='departure'; sortReverse = !sortReverse">
+              Departure
+              <span ng-show="sortType == 'departure' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'departure' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th class="clickable" ng-click="sortType='building'; sortReverse = !sortReverse">
+              Building
+              <span ng-show="sortType == 'building' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'building' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th class="clickable" ng-click="sortType='destination'; sortReverse = !sortReverse">
+              Destination
+              <span ng-show="sortType == 'destination' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'destination' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th class="clickable" ng-click="sortType='attendees'; sortReverse = !sortReverse">
+              Attendees
+              <span ng-show="sortType == 'attendees' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'attendees' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th class="clickable" ng-click="sortType='emails'; sortReverse = !sortReverse">
+              Submitters
+              <span ng-show="sortType == 'emails' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'emails' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th class="clickable" ng-click="sortType='status'; sortReverse = !sortReverse">
+              Status
+              <span ng-show="sortType == 'status' && !sortReverse" class="fa fa-caret-down"></span>
+              <span ng-show="sortType == 'status' && sortReverse" class="fa fa-caret-up"></span>
+            </th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="row in tableData">
-            <td>{{row.submitted}}</td>
-            <td>{{row.status}}</td>
+          <tr class="hover" ng-repeat="row in tableData | orderBy:sortType:sortReverse">
+            <td>{{row.submitted | date : "EEE M/d/yy h:mm a"}}</td>
+            <td>{{row.departure | date : "EEE M/d/yy h:mm a"}}</td>
             <td>{{row.building}}</td>
             <td>{{row.destination}}</td>
-            <td>{{row.total}}</td>
-            <td>{{row.friendlyDeparture}}</td>
+            <td>{{row.attendees}}</td>
             <td>
               <div ng-repeat="email in row.emails">
                 <a href="mailto:{{email}}?subject={{row.friendlyName}}">{{email}}</a>
@@ -65,8 +92,10 @@
                 <a href="{{row.emailAllUrl}}">Email All</a>
               </div>
             </td>
-            <td>{{row.nurse}}</td>
-            <td>{{row.buses}}</td>
+            <td>{{row.status}}</td>
+            <td>
+              <div>View</div>
+            </td>
           </tr>
         </tbody>
       </table>
