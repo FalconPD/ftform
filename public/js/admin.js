@@ -1,6 +1,6 @@
 var app = angular.module('ftform', []);
 
-app.controller('MyCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('MyCtrl', ['$scope', '$http', '$filter', function ($scope, $http, $filter) {
   $scope.tableData = [];
   $scope.sortType = 'submitted';
   $scope.sortReverse = false;
@@ -12,7 +12,7 @@ app.controller('MyCtrl', ['$scope', '$http', function ($scope, $http) {
       fieldTrip = response.data[i];
      
       friendlyName = 'Field Trip to ' + fieldTrip.destination + ' on ' +
-                     moment(fieldTrip.departure).format('L'); 
+                     $filter('date')(fieldTrip.departure, 'M/dd/yy');
       $scope.tableData.push({
         'submitted'   : fieldTrip.submitted,
         'departure'   : fieldTrip.departure,

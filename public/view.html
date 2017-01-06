@@ -37,7 +37,7 @@
     <!-- Title -->
     <div class="row">
       <div class="center" style="margin-top: 1rem;">
-        <h4>Viewing {{friendlyName}}</h4>
+        <h4>{{friendlyName}}</h4>
       </div>
     </div>
 
@@ -51,10 +51,15 @@
       <div class="row">
         <div class="three columns view-label">Submitter(s):</div>
         <div class="seven columns">
-           <span ng-repeat="email in response.emails">
-             <a href="mailto:{{email}}?subject={{friendlyName}}">{{email}}</a>
-             <span ng-show="!$last">, </span>
-           </span>
+          <span ng-show="response.emails.length > 1">
+            <span ng-repeat="email in response.emails">
+              <a href="mailto:{{email}}?subject={{friendlyName}}">{{email}}</a>,
+            </span>
+            <a href="{{emailAllUrl}}">Email All</a>
+          </span>
+          <span ng-show="response.emails.length == 1">
+            <a href="mailto:{{response.emails[0]}}?subject={{friendlyName}}">{{response.emails[0]}}</a>
+          </span>
         </div>
       </div>
       <div class="row">
@@ -203,14 +208,58 @@
         <div class="three columns">{{signature.timeStamp | date: "EEE M/d/yy h:mm a"}}</div>
         <div class="two columns">{{signature.response}}</div>
         <div class="two columns">{{signature.role}}</div>
-        <div class="two columns">{{signature.name}}</div>
+        <div class="two columns">{{signature.email}}</div>
         <div class="three columns">{{signature.comments}}</div>
       </div>
     </div>
-    
+
+    <!-- SYSADMIN Actions -->
+    <div ng-show="role == 'SYSADMIN'">
+      <hr>
+      <form name="myForm">
+        <fieldset>
+          <legend>Add Signature</legend>
+          <div class="row">
+            <div class="three columns">
+              <label for="response">Response</label>
+              <select class="u-full-width" name="response" ng-model="submitSignature.response" required>
+                <option value="APPROVED">APPROVED</option>
+                <option value="DENIED">DENIED</option>
+              </select>
+            </div>
+            <div class="four columns">
+              <label for="role">Role</label>
+              <select class="u-full-width" name="role" ng-model="submitSignature.role" required>
+                <option value="NURSE">NURSE</option>
+                <option value="PRINCIPAL">PRINCIPAL</option>
+                <option value="SUPERVISOR">SUPERVISOR</option>
+                <option value="TRANSPORTATION">TRANSPORTATION</option>
+                <option value="PUPIL PERSONELL SERVICES">PUPIL PERSONELL SERVICES</option>
+                <option value="ASSISTANT SUPERINTENDANT">ASSISTANT SUPERINTENDANT</option>
+                <option value="BUILDING AND GROUNDS">BUILDING AND GROUNDS</option>
+                <option value="SYSADMIN">SYSADMIN</option>
+              </select>
+            </div>
+            <div class="five columns">
+              <label>Email</label>
+              <input class="u-full-width" type="text" ng-model="submitSignature.email" disabled>
+            </div>
+          </div>
+          <div class="row">
+            <label>Comments</label>
+            <input class="u-full-width" name="comments" type="text" ng-model="submitSignature.comments">
+          </div>
+          <div class="row">
+            <div class="center">
+              <button class="center" ng-model="submitButton" ng-disabled="myForm.$invalid" ng-click="sign()">Sign</button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+
   </div>
   
-  <      
 <!-- End Document -->
 </body>
 </html>

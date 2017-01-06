@@ -14,11 +14,9 @@ var fieldTripSchema = mongoose.Schema({
                         required: true},
 	grades:              {type: [{type: String, required: true}],
                         required: true},
-  vehicles:            {type: [{type: String, required: true}],
-                        required: true},
+  vehicles:            {type: [{type: String, required: true}]},
 	chaperoneList:       {type: [{name: {type: String, required: true},
-                                phone: {type: String, required: true}}],
-                        required: true},
+                                phone: {type: String, required: true}}]},
   rosters:             {type: [{name: {type: String, required: true},
                                 url: {type: String, required: true}}],
                         required: true},
@@ -37,18 +35,20 @@ var fieldTripSchema = mongoose.Schema({
   funds:               {type: String, required: true},
   costs:               {type: String, required: true},
   buses:               {type: Number, required: true},
-  transportationNotes: {type: String, required: true},
+  transportationNotes: {type: String},
   standards:           {type: String, required: true},
   anticipatory:        {type: String, required: true},
   purpose:             {type: String, required: true},
 	status:              {type: String},
 	submitted:           {type: Date},
   nurse:               {type: String},
-  signatures:          {type: [{role: {type: String},
-                                name: {type: String},
-                                response: {type: String},
-                                timeStamp: {type: Date},
-                                comments: {type: String}}]}
+  signatures:          {type: [{role: {type: String, required: true},
+                                email: {type: String, required: true},
+                                response: {type: String, required: true},
+                                timeStamp: {type: Date, required: true},
+                                comments: {type: String, required: true}}]},
+  keys:                {type: [{role: {type: String},
+                                key: {type: String}}]}
 });
 var fieldTrip = mongoose.model('fieldTrip', fieldTripSchema);
 
@@ -58,6 +58,7 @@ var formidable = require('express-formidable');
 var app = express();
 app.use('/api/upload', formidable({keepExtensions: true}));
 app.use('/api/create', formidable());
+app.use('/api/sign', formidable());
 
 /* Serve static stuff in the public directory */
 app.use(express.static('public'));
@@ -73,13 +74,14 @@ app.post('/api/create', function (req, res) {
   doc.nurse = 'Unknown';
   doc.submitted = Date.now();
 
-  /* FIXME: This is test data */
-  doc.signatures = [{role: 'Test Role',
-                     name: 'Test Name',
-                     response: 'APPROVED',
-                     timeStamp: Date.now(),
-                     comments: 'Test comments'}];
-                     
+  doc.keys = [{role: 'NURSE', key: shortid.generate()},
+              {role: 'PRINICPAL', key: shortid.generate()},
+              {role: 'SUPERVISOR', key: shortid.generate()},
+              {role: 'ASSISTANT SUPERINTENDANT', key: shortid.generate()},
+              {role: 'TRANSPORTATION', key: shortid.generate()},
+              {role: 'PUPIL PERSONELL SERVICES', key: shortid.generate()},
+              {role: 'BUILDINGS AND GROUNDS', key: shortid.generate()},
+              {role: 'SYSADMIN', key: shortid.generate()}];
 
 	doc.save(function(err) {
 		if (err) {
@@ -90,11 +92,41 @@ app.post('/api/create', function (req, res) {
 	});
 });
 
+app.post('/api/sign/:id', function (req, res) {
+  signature = req.fields;
+  signature.timeStamp = Date.now();
+  fieldTrip.findById(req.params.id, function(err, doc) {
+    if (err) {
+      res.status(404).send(err);
+    } else {
+      key = doc.keys.find(function (element) {
+        return element.role === signature.role;
+      });
+      if (! key) 
+        res.status(500).send('Unable to key for role');
+      else {
+        if (key.key === signature.key) {
+          doc.signatures.push(signature);
+          doc.save(function(err) {
+            if (err)
+              res.status(400).send(err);
+            else
+              res.status(201).send('Signed Successfully');
+          });
+        }
+        else
+          res.status(401).send('Key values do not match for role');
+      }
+    }
+  });
+});
+
 app.get('/api/view/:id', function (req, res) {
 	fieldTrip.findById(req.params.id, function (err, doc) {
 		if (err) {
 			res.status(404).send(err);
 		} else {
+      doc.keys = [];
 			res.status(200).send(doc);
 		}
 	});

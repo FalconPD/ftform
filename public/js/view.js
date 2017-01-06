@@ -11,11 +11,25 @@ app.filter('breakFilter', function () {
   };
 });
 
-app.controller('MyCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
-  $http.get('api/view/' + $location.search().id).then(function(response) {
+app.controller('MyCtrl', ['$scope', '$http', '$location', '$filter', function ($scope, $http, $location, $filter) {
+
+  $scope.submitSignature = {};
+
+  $scope.id = $location.search().id;
+  $scope.role = $location.search().role;
+  $scope.submitSignature.role = $scope.role;
+  $scope.submitSignature.email = $location.search().email;
+  $scope.submitSignature.key = $location.search().key;
+  
+  $scope.sign = function() {
+    $http.post('/api/sign/' + $scope.id, $scope.submitSignature);
+  }
+
+  $http.get('api/view/' + $scope.id).then(function(response) {
     $scope.response = response.data;
     $scope.friendlyName = 'Field Trip to ' + $scope.response.destination + ' on ' +
-                          moment($scope.response.departure).format('L');
+                          $filter('date')($scope.response.departure, 'M/dd/yy');
     $scope.total = $scope.response.pupils + $scope.response.teachers + $scope.response.chaperones;
+    $scope.emailAllUrl = 'mailto:' + $scope.response.emails.join('; ') + '?subject=' + $scope.friendlyName;
   });
 }]);

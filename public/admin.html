@@ -25,7 +25,6 @@
 
   <script src="https://use.fontawesome.com/a11a263ab5.js"></script>
   <script src="js/angular.js"></script>
-  <script src="js/moment.min.js"></script>
   <script src="js/admin.js"></script>
 
 </head>
@@ -93,10 +92,7 @@
               </div>
             </td>
             <td>{{row.status}}</td>
-            <td>
-              <div><a href={{row.viewUrl}}>View</a></div>
-              <div>Sign</div>
-            </td>
+            <td><a href="{{row.viewUrl}}">View</a></td>
           </tr>
         </tbody>
       </table>
